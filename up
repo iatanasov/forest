@@ -12,13 +12,14 @@ ln -s ${SCRIPTPATH}/down /tmp/leftwm-theme-down
 
 #boot compton or picom if it exists
 if [ -x "$(command -v picom)" ]; then
-  picom &> /dev/null & 
+  picom --backend glx -b &> /dev/null &
+  #picom &> /dev/null &
 elif [ -x "$(command -v compton)" ]; then
-  compton &> /dev/null & 
+  compton &> /dev/null &
 fi
 
 #set the theme.toml config
-echo "LoadTheme $SCRIPTPATH/theme.toml" > $XDG_RUNTIME_DIR/leftwm/commands.pipe
+echo "LoadTheme $SCRIPTPATH/theme.toml" > $XDG_RUNTIME_DIR/leftwm/command-0.pipe
 
 
 #set background
@@ -34,10 +35,24 @@ if [ -x "$(command -v dunst)" ]; then
   dunst &
 fi
 
+xbindkeys &
+setxkbmap -model pc104 -layout us,bg -variant ,phonetic -option grp:alt_shift_toggle &
+xsetroot -cursor_name left_ptr &
+xset s on &
+xset s 180 120 &
+xmodmap ~/.Xmodmap &
+eval "$(ssh-agent)"
+thunderbird &
+rambox &
+nm-applet &
+parcellite &
+/home/iatanaso/bin/modeset &
 #boot a polybar for each monitor
 cd ${SCRIPTPATH}/polybar
+let ind=0
 polybar -m | sed s/:.*// | tac | while read -r monitor
-do 
-  monitor=$monitor polybar -c config.ini main &> /dev/null &
+do
+  monitor=$monitor polybar -c config.ini main$ind &> /dev/null &
+  let ind=ind+1
 done
 
