@@ -41,18 +41,22 @@ xsetroot -cursor_name left_ptr &
 xset s on &
 xset s 180 120 &
 xmodmap ~/.Xmodmap &
-eval "$(ssh-agent)"
 thunderbird &
-rambox &
+slack &
+# rambox &
 nm-applet &
 parcellite &
-/home/iatanaso/bin/modeset &
+# /home/iatanaso/bin/modeset &
 #boot a polybar for each monitor
 cd ${SCRIPTPATH}/polybar
 let ind=0
-polybar -m | sed s/:.*// | tac | while read -r monitor
+monitor=DP-1 polybar -c config.ini main2 &> /dev/null &
+monitor=DP-3 polybar -c config.ini main1 &> /dev/null &
+monitor=eDP-1 polybar -c config.ini main0 &> /dev/null &
+polybar -m | sed s/:.*// | while read -r monitor
 do
-  monitor=$monitor polybar -c config.ini main$ind &> /dev/null &
+  #monitor=$monitor polybar -c config.ini main$ind &> /dev/null &
+  #$monitor polybar -c config.ini main$ind &> /dev/null &
   let ind=ind+1
 done
 
