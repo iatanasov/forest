@@ -19,7 +19,7 @@ elif [ -x "$(command -v compton)" ]; then
 fi
 
 #set the theme.toml config
-echo "LoadTheme $SCRIPTPATH/theme.toml" > $XDG_RUNTIME_DIR/leftwm/command-0.pipe
+echo "LoadTheme $SCRIPTPATH/theme.ron" > $XDG_RUNTIME_DIR/leftwm/command-0.pipe
 
 
 #set background
@@ -35,6 +35,8 @@ if [ -x "$(command -v dunst)" ]; then
   dunst &
 fi
 
+eval $(dbus-launch --sh-syntax --exit-with-x11)
+dbus-update-activation-environment --systemd DBUS_SESSION_BUS_ADDRESS DISPLAY XAUTHORITY XDG_CURRENT_DESKTOP
 xbindkeys &
 setxkbmap -model pc104 -layout us,bg -variant ,phonetic -option grp:alt_shift_toggle &
 xsetroot -cursor_name left_ptr &
@@ -44,8 +46,8 @@ xmodmap ~/.Xmodmap &
 thunderbird &
 slack &
 # rambox &
-nm-applet &
-parcellite &
+# nm-applet &
+# parcellite &
 # /home/iatanaso/bin/modeset &
 #boot a polybar for each monitor
 cd ${SCRIPTPATH}/polybar
