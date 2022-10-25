@@ -18,9 +18,9 @@ elif [ -x "$(command -v compton)" ]; then
   compton &> /dev/null &
 fi
 
-#set the theme.toml config
-echo "LoadTheme $SCRIPTPATH/theme.ron" > $XDG_RUNTIME_DIR/leftwm/command-0.pipe
-
+#set the theme.ron config
+#echo "LoadTheme $SCRIPTPATH/theme.ron" > $XDG_RUNTIME_DIR/leftwm/command-0.pipe
+leftwm-command "LoadTheme $SCRIPTPATH/theme.ron"
 
 #set background
 if [ -x "$(command -v feh)" ]; then
@@ -45,10 +45,7 @@ xset s 180 120 &
 xmodmap ~/.Xmodmap &
 thunderbird &
 slack &
-# rambox &
-# nm-applet &
-# parcellite &
-# /home/iatanaso/bin/modeset &
+#/home/iatanaso/bin/modeset &
 #boot a polybar for each monitor
 cd ${SCRIPTPATH}/polybar
 let ind=0

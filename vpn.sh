@@ -1,8 +1,7 @@
 #!/bin/sh
 # nmcli connection up RedHatGlobalVPN
-ret=$(nmcli -t  --fields connection.id  connection show  RedHatGlobalVPN)
-ret=$?
-if [ $ret -eq 0 ]
+ret=$(nmcli -t  --fields connection.id  connection show --active  RedHatGlobalVPN)
+if [[ $ret == *"RedHatGlobalVPN"* ]]
 then
     echo ""
 else
