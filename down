@@ -17,4 +17,5 @@ pkill parcellite
 pkill thunderbird
 pkill nm-applet
 pkill xbindkeys 
+ppkill wallpaper-picker*
 pkill slack

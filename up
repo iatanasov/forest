@@ -19,13 +19,12 @@ elif [ -x "$(command -v compton)" ]; then
 fi
 
 #set the theme.ron config
-#echo "LoadTheme $SCRIPTPATH/theme.ron" > $XDG_RUNTIME_DIR/leftwm/command-0.pipe
 leftwm-command "LoadTheme $SCRIPTPATH/theme.ron"
 
 #set background
-if [ -x "$(command -v feh)" ]; then
-  feh --bg-scale "${SCRIPTPATH}/background.jpg"
-fi
+#if [ -x "$(command -v feh)" ]; then
+#  feh --bg-scale "${SCRIPTPATH}/background.jpg"
+#fi
 
 #make sure all fonts needed are installed
 ${SCRIPTPATH}/fonts/install_fonts
@@ -42,20 +41,15 @@ setxkbmap -model pc104 -layout us,bg -variant ,phonetic -option grp:alt_shift_to
 xsetroot -cursor_name left_ptr &
 xset s on &
 xset s 180 120 &
-xmodmap ~/.Xmodmap &
+xmodmap ~/.Xmodmap 
+wallpaper-picker --image-paths ~/images/ --sleep 14400 &
 thunderbird &
-slack &
+# slack &
 #/home/iatanaso/bin/modeset &
 #boot a polybar for each monitor
 cd ${SCRIPTPATH}/polybar
-let ind=0
-monitor=DP-1 polybar -c config.ini main2 &> /dev/null &
-monitor=DP-3 polybar -c config.ini main1 &> /dev/null &
-monitor=eDP-1 polybar -c config.ini main0 &> /dev/null &
-polybar -m | sed s/:.*// | while read -r monitor
-do
-  #monitor=$monitor polybar -c config.ini main$ind &> /dev/null &
-  #$monitor polybar -c config.ini main$ind &> /dev/null &
-  let ind=ind+1
+monitors=($(polybar -m | sed s/:.*// | tr -t '\n' ' '))
+for mon in  "${monitors[@]}"; do
+  MONITOR=$mon polybar -c config.ini main &> /dev/null &
 done
 
