@@ -39,12 +39,12 @@ dbus-update-activation-environment --systemd DBUS_SESSION_BUS_ADDRESS DISPLAY XA
 xbindkeys &
 xsetroot -cursor_name left_ptr &
 xset s on &
-xset s 180 120 &
+xset s 680 600 &
 xmodmap ~/.Xmodmap 
 wallpaper-picker --image-paths ~/images/ --sleep 14400 &
 thunderbird &
 # slack &
-#/home/iatanaso/bin/modeset &
+/home/iatanaso/bin/modeset &
 #boot a polybar for each monitor
 cd ${SCRIPTPATH}/polybar
 monitors=($(polybar -m | sed s/:.*// | tr -t '\n' ' '))
