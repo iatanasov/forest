@@ -15,7 +15,6 @@ pkill polybar
 pkill dunst
 pkill parcellite
 pkill thunderbird
-pkill nm-applet
 pkill xbindkeys 
-pkill wallpaper-picker
 pkill slack
+pkill udiskie

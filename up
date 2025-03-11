@@ -1,25 +1,27 @@
 #!/bin/bash
-export SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
-
+export SCRIPTPATH="$(
+  cd "$(dirname "$0")"
+  pwd -P
+)"
 
 #down the last running theme
 if [ -f "/tmp/leftwm-theme-down" ]; then
-    /tmp/leftwm-theme-down
-    rm /tmp/leftwm-theme-down
+  /tmp/leftwm-theme-down
+  rm /tmp/leftwm-theme-down
 fi
+/home/iatanaso/bin/modeset &
 ln -s ${SCRIPTPATH}/down /tmp/leftwm-theme-down
-
-
-#boot compton or picom if it exists
-if [ -x "$(command -v picom)" ]; then
-  picom --backend glx -b &> /dev/null &
-  #picom &> /dev/null &
-elif [ -x "$(command -v compton)" ]; then
-  compton &> /dev/null &
-fi
 
 #set the theme.ron config
 leftwm-command "LoadTheme $SCRIPTPATH/theme.ron"
+
+#boot compton or picom if it exists
+if [ -x "$(command -v picom)" ]; then
+  picom --backend glx -b &>/dev/null &
+  #picom &> /dev/null &
+elif [ -x "$(command -v compton)" ]; then
+  compton &>/dev/null &
+fi
 
 #set background
 #if [ -x "$(command -v feh)" ]; then
@@ -34,21 +36,25 @@ if [ -x "$(command -v dunst)" ]; then
   dunst &
 fi
 
-eval $(dbus-launch --sh-syntax --exit-with-x11)
-dbus-update-activation-environment --systemd DBUS_SESSION_BUS_ADDRESS DISPLAY XAUTHORITY XDG_CURRENT_DESKTOP
+# eval $(dbus-launch --sh-syntax --exit-with-x11)
+dbus-update-activation-environment --systemd DBUS_SESSION_BUS_ADDRESS DISPLAY XAUTHORITY XDG_CURRENT_DESKTOP &
+# /home/iatanaso/bin/modeset &
 xbindkeys &
-xsetroot -cursor_name left_ptr &
+xsetxkbmap -model pc104 -layout us,bg -variant ,phonetic -option grp:rctrl_rshift_toggle &
+setroot -cursor_name left_ptr &
 xset s on &
 xset s 680 600 &
-xmodmap ~/.Xmodmap 
-wallpaper-picker --image-paths ~/images/ --sleep 14400 &
+systemctl --user start wallpaper-picker.service
 thunderbird &
-# slack &
-/home/iatanaso/bin/modeset &
+slack &
+udiskie --tray --file-manager pcmanfm &
+parcellite &
+alacritty -e russ read &
+alacritty -e spotify_player --theme orangeundef &
 #boot a polybar for each monitor
-cd ${SCRIPTPATH}/polybar
+cd "${SCRIPTPATH}/polybar" || exit
 monitors=($(polybar -m | sed s/:.*// | tr -t '\n' ' '))
-for mon in  "${monitors[@]}"; do
-  MONITOR=$mon polybar -c config.ini main &> /dev/null &
+for mon in "${monitors[@]}"; do
+  sleep 2
+  MONITOR=$mon polybar -c config.ini main &>>/tmp/polybar.log &
 done
-
